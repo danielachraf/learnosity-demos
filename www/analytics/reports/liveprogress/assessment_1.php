@@ -15,6 +15,12 @@ $student = array(
     'name' => 'Jesse Pinkman'
 );
 
+$doRedirect=isset($_GET['do_redirect']);
+$neilsFix=isset($_GET['neil_s_fix']);
+if ($neilsFix) {
+    $doRedirect = false;
+}
+
 $request = array(
     'activity_id'    => 'itemsassessdemo',
     'name'           => 'Demo showcasing remote control events',
@@ -93,9 +99,73 @@ $signedRequest = $Init->generate();
 <body>
     <!-- Container for the items api to load into -->
     <div id="learnosity_assess"></div>
+    <button id="submitLrn">Hooked submit</button>
     <script src="<?php echo $url_items; ?>"></script>
     <script>
-        var itemsApp = LearnosityItems.init(<?php echo $signedRequest; ?>);
+        var itemsApp = LearnosityItems.init(<?php echo $signedRequest; ?>
+);
+    </script>
+    <script>
+        numOfQuestions = 6;
+        function winCrsOnSubmit() {
+            console.log("submit clicked");
+            var lockedBrowserStarted = false;
+            var settings =
+            {
+                success: function (response_ids) {
+                    console.log("Test saved successfully.", response_ids);
+                    /* lockedBrowserStarted = getCookie('LockedBrowserStarted').toLowerCase(); */
+                    /* setStatusCookies(false, false, false); */
+                    /* if (lockedBrowserStarted == 'true') { */
+                    /*     document.cookie = "ReturnUrl=" + getCookie('LockedBrowserEndLink'); */
+                    /* } */
+                    <?php if ($doRedirect) { ?>
+                    window.location.replace('/Home/Completed');
+                    <?php } ?>
+                },
+                error: function (e) {
+                    console.log("Unable to save test, please try again.", e);
+                }
+            };
+           itemsApp.attemptedQuestions(function (responses) {
+                var proceed = true;
+                var skipped = numOfQuestions - responses.length;
+                if (skipped > 0) {
+                    proceed = confirm("You have not answered " + skipped + " of " + numOfQuestions +
+                        " questions. Once submitted, you will not be able to re-open the assessment. Are you sure you want to submit the assessment?");
+                }
+                else {
+                    proceed = confirm("Once submitted, you will not be able to re-open the assessment. Are you sure you want to submit the assessment?");
+                }
+                if (proceed) {
+                    <?php
+                    if ($neilsFix) {
+                    ?>
+                        /* , { */
+                        /*     readyListener: function() { */
+                                itemsApp.eventsApp().on(function(events) {
+                                    console.log("potential submit event received");
+                                    for (val of events) {
+                                        if(val.verb.id === 'http://activitystrea.ms/schema/1.0/submit') {
+                                            console.log("submitted!");
+                                            window.location.replace("https://www.google.com");
+                                        }
+                                    };
+                                });
+                                console.log("submit hooked");
+                            /* } */
+                        /* } */
+                    <?php
+                    } ?>
+                    itemsApp.submit(settings);
+                }
+            });
+        }
+
+        window.onload = function() {
+            document.getElementById("submitLrn").onclick=winCrsOnSubmit;
+        };
+
     </script>
 </body>
 </html>
