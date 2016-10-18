@@ -19,7 +19,7 @@ $request = array(
     'state'          => 'initial',
     'activity_id'    => 'itemsinlinedemo',
     'session_id'     => Uuid::generate(),
-    'items'          => array('act1','act2','act3','act4','act5','act6'),
+    'items'          => array('act1','act2','act3','act4','act5','act6','act13', 'act17'),
     'type'           => 'local_practice'
 );
 
@@ -48,6 +48,8 @@ $signedRequest = $Init->generate();
         <span class="learnosity-item" data-reference="act4"></span>
         <span class="learnosity-item" data-reference="act5"></span>
         <span class="learnosity-item" data-reference="act6"></span>
+        <span class="learnosity-item" data-reference="act13"></span>
+        <span class="learnosity-item" data-reference="act17"></span>
     </p>
 </div>
 
@@ -64,8 +66,9 @@ $signedRequest = $Init->generate();
                     if (question.isValid()) {
                         return;
                     }
-                    if (question.getResponse().type === 'array') {
-                        map = question.mapValidationMetadata('distractor_rationale_response_level');
+                    console.log(question.mapValidationMetadata('distractor_rationale_response_level'));
+                    map = question.mapValidationMetadata('distractor_rationale_response_level');
+                    if (map) {
                         $.each(map.incorrect, function (i, data) {
 
                             // Each item in the `map.incorrect` array is an
