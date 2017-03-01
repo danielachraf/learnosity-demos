@@ -56,16 +56,16 @@ $request = array(
         array(
             'id'          => 'report-1',
             'type'        => 'sessions-summary',
-            'user_id'     => 'mce_student',
+            'user_id'     => 'demo_student',
             'session_ids' => array(
-                'd7ad7585-a0c1-4c01-9762-44a85f55835c'
+                'eea85914-7097-4fd8-afe2-7e9fa05ed2bb'
             )
         ),
         array(
             'id'         => 'report-2',
             'type'       => 'session-detail-by-item',
-            'user_id'    => 'brianmoser',
-            'session_id' => '8151DD9E-9029-4D13-AC773EC9C05E7FF2'
+            'user_id'    => 'demo_student',
+            'session_id' => 'eea85914-7097-4fd8-afe2-7e9fa05ed2bb'
             // Better to use this session below as it corresponds to the session-detail-by-question report below.
             // 'user_id'    => 'demo_student',
             // 'session_id' => 'ac65af88-78e6-4117-920b-f11497542e45'
@@ -75,7 +75,7 @@ $request = array(
             'id'         => 'report-2b',
             'type'       => 'session-detail-by-question',
             'user_id'    => 'demo_student',
-            'session_id' => 'ac65af88-78e6-4117-920b-f11497542e45'
+            'session_id' => 'eea85914-7097-4fd8-afe2-7e9fa05ed2bb'
         ),
         array(
             'id'        => 'report-3',
@@ -86,10 +86,10 @@ $request = array(
         array(
             'id'          => 'report-4',
             'type'        => 'sessions-summary-by-tag',
-            'user_id'     => 'mce_student_3',
+            'user_id'     => 'demo_student',
             'hierarchy'   => 'CCSS',
             'session_ids' => array(
-                'd5cde952-1111-49ad-bfc7-c1ba102f3b22'
+                'eea85914-7097-4fd8-afe2-7e9fa05ed2bb'
             ),
         ),
         array(
@@ -334,11 +334,11 @@ $request = array(
             'id'           => 'report-22',
             'type'         => 'sessions-list-by-item',
             'limit'        => 15,
-            'activity_id'  => 'MCE_5.MD.5b',
+            'activity_id'  => 'partialscoringtest123',
             'display_user' => true,
             'users'        => array(
                 array(
-                    'id'   => 'mce_student',
+                    'id'   => 'mayaSyncTest1',
                     'name' => 'Brian Moser'
                 )
             )
@@ -346,9 +346,9 @@ $request = array(
         array(
             'id'          => 'report-23',
             'type'        => 'sessions-summary-by-question',
-            'user_id'     => 'mce_student',
+            'user_id'     => 'demo_student',
             'session_ids' => array(
-                'd7ad7585-a0c1-4c01-9762-44a85f55835c'
+                'eea85914-7097-4fd8-afe2-7e9fa05ed2bb'
             )
         ),
         array(
