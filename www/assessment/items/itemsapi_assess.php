@@ -33,20 +33,20 @@ $request = array(
     'assess_inline'  => true,
     'config'         => array(
         'metadata' => [
-            'items' => [
-                [
-                    'reference' => 'Demo3',
-                    'display_name' => 'Question 3'
-                ],
-                [
-                    'reference' => 'Demo4',
-                    'display_name' => 'Question 4'
-                ],
-                [
-                    'reference' => 'Demo6',
-                    'display_name' => 'Question 6'
-                ]
-            ]
+//            'items' => [
+//                [
+//                    'reference' => 'Demo3',
+//                    'display_name' => 'Question 3'
+//                ],
+//                [
+//                    'reference' => 'Demo4',
+//                    'display_name' => 'Question 4'
+//                ],
+//                [
+//                    'reference' => 'Demo6',
+//                    'display_name' => 'Question 6'
+//                ]
+//            ]
         ],
         'ignore_question_attributes' => array(''), // validation
         'title'                      => 'Demo activity - showcasing question types and assess options',
@@ -59,6 +59,36 @@ $request = array(
                 'show_extend' => true
             )
         ),
+        'regions'=> [
+            'right' => [
+                array(
+                    'type' => 'verticaltoc_element'
+                ),
+                array(
+                    'type' => 'reviewscreen_button'
+                ),
+                array(
+                    'type' => 'accessibility_button'
+                ),
+                array(
+                    'type' => 'separator_element'
+                ),
+                array(
+                    'type' => 'calculator_button'
+                ),
+                array(
+                    'type' => 'flagitem_button'
+                )
+            ],
+            'bottom-right' => [
+                array(
+                    'type' => 'next_button'
+                ),
+                array(
+                    'type' => 'previous_button'
+                )
+            ]
+        ],
         'navigation' => array(
             'scroll_to_top'            => false,
             'scroll_to_test'           => false,
@@ -135,64 +165,64 @@ $signedRequest = $Init->generate();
 
 ?>
 
-<div class="jumbotron section">
-    <div class="toolbar">
-        <ul class="list-inline">
-            <li data-toggle="tooltip" data-original-title="Customise API Settings"><a href="#" class="text-muted" data-toggle="modal" data-target="#settings"><span class="glyphicon glyphicon-list-alt"></span></a></li>
-            <li data-toggle="tooltip" data-original-title="Preview API Initialisation Object"><a href="#"  data-toggle="modal" data-target="#initialisation-preview"><span class="glyphicon glyphicon-search"></span></a></li>
-            <li data-toggle="tooltip" data-original-title="Visit the documentation"><a href="http://docs.learnosity.com/itemsapi/" title="Documentation"><span class="glyphicon glyphicon-book"></span></a></li>
-            <li data-toggle="tooltip" data-original-title="Toggle product overview box"><a href="#"><span class="glyphicon glyphicon-chevron-up jumbotron-toggle"></span></a></li>
-        </ul>
+    <div class="jumbotron section">
+        <div class="toolbar">
+            <ul class="list-inline">
+                <li data-toggle="tooltip" data-original-title="Customise API Settings"><a href="#" class="text-muted" data-toggle="modal" data-target="#settings"><span class="glyphicon glyphicon-list-alt"></span></a></li>
+                <li data-toggle="tooltip" data-original-title="Preview API Initialisation Object"><a href="#"  data-toggle="modal" data-target="#initialisation-preview"><span class="glyphicon glyphicon-search"></span></a></li>
+                <li data-toggle="tooltip" data-original-title="Visit the documentation"><a href="http://docs.learnosity.com/itemsapi/" title="Documentation"><span class="glyphicon glyphicon-book"></span></a></li>
+                <li data-toggle="tooltip" data-original-title="Toggle product overview box"><a href="#"><span class="glyphicon glyphicon-chevron-up jumbotron-toggle"></span></a></li>
+            </ul>
+        </div>
+        <div class="overview">
+            <h1>Items API – Assess</h1>
+            <p>With the flick of a switch make the items into an assessment. Truly write once - use anywhere.<p>
+            <p>Type ctrl+shift+m to open the Administration Panel. The default password is <em>password</em>.</p>
+        </div>
     </div>
-    <div class="overview">
-        <h1>Items API – Assess</h1>
-        <p>With the flick of a switch make the items into an assessment. Truly write once - use anywhere.<p>
-        <p>Type ctrl+shift+m to open the Administration Panel. The default password is <em>password</em>.</p>
+
+    <div class="section">
+        <!-- Container for the items api to load into -->
+        <div id="learnosity_assess"></div>
     </div>
-</div>
+    <script src="<?php echo $url_items; ?>"></script>
+    <script>
+        var eventOptions = {
+                readyListener: init
+            },
+            itemsApp = LearnosityItems.init(<?php echo $signedRequest; ?>, eventOptions);
 
-<div class="section">
-    <!-- Container for the items api to load into -->
-    <div id="learnosity_assess"></div>
-</div>
-<script src="<?php echo $url_items; ?>"></script>
-<script>
-    var eventOptions = {
-            readyListener: init
-        },
-        itemsApp = LearnosityItems.init(<?php echo $signedRequest; ?>, eventOptions);
+        function init () {
+            var assessApp = itemsApp.assessApp();
 
-    function init () {
-        var assessApp = itemsApp.assessApp();
+            assessApp.on('item:load', function () {
+                console.log('Active item:', getActiveItem(this.getItems()));
+            });
 
-        assessApp.on('item:load', function () {
-            console.log('Active item:', getActiveItem(this.getItems()));
-        });
+            assessApp.on('test:submit:success', function () {
+                toggleModalClass();
+            });
+        }
 
-        assessApp.on('test:submit:success', function () {
-            toggleModalClass();
-        });
-    }
-
-    /**
-     * Returns the active item if using the Assess API
-     * @param  {object} items Object of all items currently loaded
-     * @return {object}       Current active item
-     */
-    function getActiveItem (items) {
-        for (var item in items) {
-            if (items.hasOwnProperty(item) && items[item].active === true) {
-                return items[item];
+        /**
+         * Returns the active item if using the Assess API
+         * @param  {object} items Object of all items currently loaded
+         * @return {object}       Current active item
+         */
+        function getActiveItem (items) {
+            for (var item in items) {
+                if (items.hasOwnProperty(item) && items[item].active === true) {
+                    return items[item];
+                }
             }
         }
-    }
 
-    function toggleModalClass () {
-        $('.modal-backdrop').css('display', 'none');
-    }
-</script>
+        function toggleModalClass () {
+            $('.modal-backdrop').css('display', 'none');
+        }
+    </script>
 
 <?php
-    include_once 'views/modals/settings-items.php';
-    include_once 'views/modals/initialisation-preview.php';
-    include_once 'includes/footer.php';
+include_once 'views/modals/settings-items.php';
+include_once 'views/modals/initialisation-preview.php';
+include_once 'includes/footer.php';

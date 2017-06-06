@@ -66,6 +66,7 @@ if (isset($filter_post['api_type'])) {
                 $request = array_replace_recursive($request, $filter_post);
                 $requestKey = &$request;
             }
+            echo "<p>items: ".json_encode($requestKey)."</p>";//checker
             break;
         case 'questioneditor':
             $request = array_replace_recursive($request, $filter_post);
@@ -181,6 +182,7 @@ if (isset($filter_post['api_type'])) {
             unset($request['api_type']);
             unset($request['regionSelector']);
             $requestKey = $request;
+            echo "<p>regions: ".json_encode($requestKey)."</p>";//checker
             break;
         default:
             # do nothing
